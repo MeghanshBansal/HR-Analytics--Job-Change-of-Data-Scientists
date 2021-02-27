@@ -1,0 +1,15 @@
+VGG_MODEL = VGG16(weights = 'imagenet', include_top = False, input_shape = (150, 150, 3))
+global_average_layer = tf.keras.layers.GlobalAveragePooling2D()
+prediction_layer = tf.keras.layers.Dense(len(classes),activation='softmax')
+
+model_ = tf.keras.Sequential([
+  VGG_MODEL,
+  global_average_layer,
+  prediction_layer
+])
+
+model.compile(optimizer='adam', 
+              loss=tf.keras.losses.categorical_crossentropy,
+              metrics=["accuracy"])
+
+history_ = model.fit_generator(train_gen, validation_data= valid_gen, epochs=10, steps_per_epoch=100)
